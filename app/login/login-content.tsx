@@ -102,10 +102,6 @@ export function LoginContent() {
           <div className="relative overflow-hidden px-7 py-7 sm:px-9">
             <div className="login-scan pointer-events-none absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-transparent via-white/12 to-transparent" />
             <LoginForm language={language} />
-            <div className="mt-6 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.26em] text-white/44">
-              <span>{text.footerLeft}</span>
-              <span>{text.footerRight}</span>
-            </div>
           </div>
         </div>
       </section>

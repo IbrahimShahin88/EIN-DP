@@ -136,25 +136,6 @@ export function LoginForm({ language }: { language: Language }) {
       >
         {isSubmitting ? text.submitting : text.submit}
       </button>
-
-      <div className={`mt-2 grid gap-4 border-t border-white/10 pt-4 ${isArabic ? "text-right" : "text-left"}`}>
-        <div className={`flex items-center gap-2 ${isArabic ? "justify-end" : "justify-start"}`}>
-          <span className="grid h-8 w-8 place-items-center rounded-full border border-[var(--port-amber)] text-[10px] font-black text-[var(--port-amber)]">
-            OK
-          </span>
-          <span className="text-[10px] font-black uppercase leading-3 tracking-[0.18em] text-white/60">
-            {text.secure}
-          </span>
-        </div>
-        <div className="grid gap-2 text-xs font-medium text-white/72">
-          <a className="hover:text-[var(--port-amber)]" href="#">
-            {text.forgot}
-          </a>
-          <a className="hover:text-[var(--port-amber)]" href="#">
-            {text.register}
-          </a>
-        </div>
-      </div>
     </form>
   );
 }
