@@ -12,27 +12,12 @@ export default async function LoginPage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#071f36] text-[#0b2540]">
       <div
-        className="absolute inset-x-0 top-[70px] bottom-8 bg-cover bg-center"
+        className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: "url('/dp-world-login-bg.png')" }}
       />
-      <div className="absolute inset-x-0 top-[70px] bottom-8 bg-[#061b31]/35" />
+      <div className="absolute inset-0 bg-[#061b31]/35" />
 
-      <header className="relative z-10 flex h-[70px] items-center justify-between bg-white px-6 shadow-sm sm:px-10">
-        <div className="flex items-center gap-3 text-right">
-          <div className="h-9 border-r border-slate-300 pr-4 text-xl font-semibold text-[#0b2540]">إدارة الأمن</div>
-        </div>
-        <div className="flex items-center gap-3 text-left" dir="ltr">
-          <div className="grid h-9 w-9 place-items-center rounded-full bg-[#08385c] text-sm font-black text-white">
-            dp
-          </div>
-          <div>
-            <p className="text-lg font-black leading-5 text-[#0b2540]">موانئ دبي العالمية</p>
-            <p className="text-base font-black leading-5 text-[#0b2540]">DP WORLD</p>
-          </div>
-        </div>
-      </header>
-
-      <section className="relative z-10 mx-auto flex min-h-[calc(100vh-102px)] w-full max-w-7xl flex-col px-5 py-8 sm:px-8 lg:px-12">
+      <section className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col px-5 py-8 sm:px-8 lg:px-12">
         <div className="flex flex-1 flex-col gap-8 lg:grid lg:grid-cols-[1fr_430px_1fr] lg:items-start">
           <div className="pt-2 text-white lg:pt-8">
             <div className="flex items-center gap-5">
@@ -65,17 +50,6 @@ export default async function LoginPage() {
           </div>
         </div>
       </section>
-
-      <footer className="relative z-10 flex h-8 items-center justify-between bg-white px-6 text-xs text-[#0b2540] sm:px-8">
-        <div className="flex items-center gap-3" dir="ltr">
-          <span>English</span>
-          <span className="h-4 w-px bg-slate-300" />
-          <span>Terms</span>
-          <span className="h-4 w-px bg-slate-300" />
-          <span>Privacy password</span>
-        </div>
-        <p>© 2026 موانئ دبي العالمية. جميع الحقوق محفوظة.</p>
-      </footer>
     </main>
   );
 }
