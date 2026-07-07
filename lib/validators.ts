@@ -11,6 +11,24 @@ export function requireString(value: unknown, field: string, maxLength = 255) {
   return trimmed;
 }
 
+export function requireEmail(value: unknown) {
+  const email = requireString(value, "email", 320).toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    throw new Error("email is invalid.");
+  }
+
+  return email;
+}
+
+export function requireStrongPassword(value: unknown) {
+  const password = requireString(value, "password", 256);
+  if (password.length < 10) {
+    throw new Error("password must be at least 10 characters.");
+  }
+
+  return password;
+}
+
 export function optionalString(value: unknown, maxLength = 1000) {
   if (value === undefined || value === null || value === "") {
     return null;

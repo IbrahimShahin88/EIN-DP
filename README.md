@@ -7,7 +7,8 @@ Sprint 1 delivers:
 - Next.js App Router + TypeScript + Tailwind CSS
 - Secure login API with signed HTTP-only cookies
 - Role-based redirects for `admin`, `supervisor`, `guard`, and `management`
-- Basic empty dashboards for each role
+- Admin-only user creation after the first bootstrap account
+- Basic responsive dashboards for each role
 - TiDB/MySQL connection layer using `mysql2`
 - SQL schema for the core MVP tables
 
@@ -44,6 +45,8 @@ INSERT INTO users (full_name, email, password_hash, role, status)
 VALUES ('AYN Admin', 'admin@example.com', 'PASTE_HASH_HERE', 'admin', 'active');
 ```
 
+After that first bootstrap account, create all additional users from `/admin`. Public registration is intentionally not available.
+
 6. Start the app:
 
 ```bash
@@ -66,6 +69,7 @@ Open `http://localhost:3000/login`.
 - `GET /api/me`
 - `GET /api/health/db`
 - `GET /api/dashboard/summary`
+- `GET/POST /api/users` (admin only)
 - `GET/POST /api/tasks`
 - `GET/POST /api/incidents`
 - `GET/POST /api/checkpoints`
