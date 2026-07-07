@@ -10,7 +10,7 @@ const copy = {
     eyebrow: "",
     title: "نؤمن عالمنا الملئ بالنجاحات",
     description: "دخول مخصص للفرق المصرح لها بمتابعة المهام الأمنية، الدوريات، والبلاغات التشغيلية.",
-    tags: ["دوريات", "بلاغات", "تصاريح دخول"],
+    tags: [],
     panelEyebrow: "دخول آمن",
     panelTitle: "تسجيل الدخول الأمني",
     panelHint: "التحقق من الهوية",
@@ -89,17 +89,19 @@ export function LoginContent() {
             </p>
           </div>
 
-          <div
-            className={`login-reveal-copy mt-8 flex flex-wrap gap-3 text-xs font-bold ${
-              isArabic ? "justify-start" : "uppercase tracking-[0.22em]"
-            } text-white/78`}
-          >
-            {(text.tags as string[]).map((tag) => (
-              <span key={tag} className="border border-white/18 bg-white/8 px-3 py-2 backdrop-blur">
-                {tag}
-              </span>
-            ))}
-          </div>
+          {(text.tags as string[]).length ? (
+            <div
+              className={`login-reveal-copy mt-8 flex flex-wrap gap-3 text-xs font-bold ${
+                isArabic ? "justify-start" : "uppercase tracking-[0.22em]"
+              } text-white/78`}
+            >
+              {(text.tags as string[]).map((tag) => (
+                <span key={tag} className="border border-white/18 bg-white/8 px-3 py-2 backdrop-blur">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          ) : null}
         </div>
 
         <div className="login-reveal-panel login-panel mx-auto w-full max-w-[440px] p-px shadow-[0_36px_100px_rgba(0,0,0,0.55)] lg:translate-x-8">
