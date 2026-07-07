@@ -15,10 +15,10 @@ const copy = {
     switchHint: "EN",
   },
   en: {
-    eyebrow: "Port Security Command",
-    title: "Security Gate",
-    description: "Authorized access for patrols, incidents, and operational security teams.",
-    tags: ["Patrol", "Incident", "Access Control"],
+    eyebrow: "",
+    title: "Securing our world full of achievements",
+    description: "Dedicated access for authorized teams to manage security tasks, patrols, and operational reports.",
+    tags: [],
     switchLabel: "العربية",
     switchHint: "AR",
   },
@@ -60,7 +60,7 @@ export function LoginContent() {
             ) : null}
             <h1
               className={`login-display mt-4 font-black uppercase tracking-normal text-white drop-shadow-[0_18px_35px_rgba(0,0,0,0.5)] ${
-                isArabic ? "text-3xl leading-[1.18] sm:text-4xl lg:text-5xl" : "text-5xl leading-[0.96] sm:text-6xl lg:text-7xl"
+                isArabic ? "text-3xl leading-[1.18] sm:text-4xl lg:text-5xl" : "text-3xl leading-[1.08] sm:text-4xl lg:text-5xl"
               }`}
             >
               {text.title}
@@ -92,10 +92,12 @@ export function LoginContent() {
               <button
                 type="button"
                 onClick={() => setLanguage(isArabic ? "en" : "ar")}
-                className="focus-ring flex min-w-28 items-center justify-center gap-2 border border-white/20 bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-white shadow-[0_16px_40px_rgba(0,0,0,0.28)] backdrop-blur transition hover:border-[var(--port-amber)] hover:text-[var(--port-amber)]"
+                className="focus-ring flex items-center justify-center gap-2 border border-white/20 bg-white/10 px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-white shadow-[0_16px_40px_rgba(0,0,0,0.28)] backdrop-blur transition hover:border-[var(--port-amber)] hover:text-[var(--port-amber)]"
                 aria-label={isArabic ? "Switch to English" : "التبديل إلى العربية"}
               >
-                <GlobeIcon className="h-4 w-4 text-[var(--port-amber)]" />
+                <span className="grid h-7 w-7 place-items-center rounded-full border border-[var(--port-amber)]/70 bg-[rgba(244,197,106,0.12)]">
+                  <GlobeIcon className="h-4 w-4 text-[var(--port-amber)]" />
+                </span>
                 <span>{text.switchLabel}</span>
                 <span className="text-[var(--port-amber)]">{text.switchHint}</span>
               </button>
