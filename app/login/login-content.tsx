@@ -60,7 +60,7 @@ export function LoginContent() {
             ) : null}
             <h1
               className={`login-display mt-4 font-black uppercase tracking-normal text-white drop-shadow-[0_18px_35px_rgba(0,0,0,0.5)] ${
-                isArabic ? "text-3xl leading-[1.18] sm:text-4xl lg:text-5xl" : "text-3xl leading-[1.08] sm:text-4xl lg:text-5xl"
+                isArabic ? "text-3xl leading-[1.18] sm:text-4xl lg:text-5xl" : "whitespace-nowrap text-2xl leading-[1.08] sm:text-3xl lg:text-4xl"
               }`}
             >
               {text.title}
