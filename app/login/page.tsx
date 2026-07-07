@@ -10,42 +10,71 @@ export default async function LoginPage() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#071f36] text-[#0b2540]">
+    <main className="login-luxury relative min-h-screen overflow-hidden bg-[var(--port-ink)] text-[var(--port-ivory)]">
       <div
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0 scale-[1.03] bg-cover bg-center"
         style={{ backgroundImage: "url('/dp-world-login-bg.png')" }}
       />
-      <div className="absolute inset-0 bg-[#061b31]/35" />
+      <div className="login-noise absolute inset-0" />
+      <div className="login-grid absolute inset-0" />
+      <div className="login-grain absolute inset-0" />
 
-      <section className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col px-5 py-8 sm:px-8 lg:px-12">
-        <div className="flex flex-1 flex-col gap-8 lg:grid lg:grid-cols-[1fr_430px_1fr] lg:items-start">
-          <div className="pt-2 text-white lg:pt-8">
-            <div className="flex items-center gap-5">
-              <div className="grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-[#f5b42d] via-[#f5b42d] to-[#0877a5] text-3xl font-black text-white shadow-xl ring-4 ring-white/25">
-                dp
+      <section className="relative z-10 mx-auto grid min-h-screen w-full max-w-7xl items-center px-5 py-8 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:px-12">
+        <div className="max-w-2xl pb-8 pt-4 lg:-translate-y-8">
+          <div className="login-reveal-mark flex items-center gap-5">
+            <div className="grid h-24 w-24 place-items-center rounded-full bg-[conic-gradient(from_210deg,#f4c56a,#0a76a9,#082642,#f4c56a)] p-1 shadow-[0_24px_70px_rgba(0,0,0,0.42)]">
+              <div className="grid h-full w-full place-items-center rounded-full bg-[var(--port-ink)] text-3xl font-black text-[var(--port-amber)]">
+                DP
               </div>
-              <div>
-                <h1 className="text-5xl font-black tracking-normal drop-shadow sm:text-6xl">DP WORLD</h1>
-                <p className="mt-1 text-xl font-medium uppercase tracking-normal text-white/95">
-                  Security Management System
-                </p>
-              </div>
+            </div>
+            <div className="h-px flex-1 bg-gradient-to-r from-[var(--port-gold)] via-white/30 to-transparent" />
+          </div>
+
+          <div className="login-reveal-copy mt-8">
+            <p className="text-sm font-bold uppercase tracking-[0.42em] text-[var(--port-amber)]">
+              Port Security Command
+            </p>
+            <h1 className="login-display mt-4 max-w-xl text-6xl font-black uppercase leading-[0.92] tracking-normal text-white drop-shadow-[0_18px_35px_rgba(0,0,0,0.5)] sm:text-7xl lg:text-8xl">
+              DP World
+            </h1>
+            <div className="mt-6 max-w-xl border-r-2 border-[var(--port-gold)] pr-5 text-right">
+              <p className="text-2xl font-bold leading-9 text-white">بوابة إدارة الأمن بالميناء</p>
+              <p className="mt-3 text-sm leading-7 text-white/72">
+                دخول مخصص للفرق المصرح لها بمتابعة المهام الأمنية، الدوريات، والبلاغات التشغيلية.
+              </p>
             </div>
           </div>
 
-          <div className="mx-auto mt-2 w-full max-w-[430px] overflow-hidden rounded-lg shadow-[0_28px_80px_rgba(2,12,27,0.35)] ring-1 ring-white/35 lg:mt-24">
-            <div className="bg-[#082c4d] px-6 py-5 text-center text-white">
-              <h2 className="text-2xl font-black tracking-normal">تسجيل الدخول للنظام الأمني</h2>
-              <p className="mt-1 text-sm font-medium uppercase tracking-normal text-white/90">
-                Log in to security system
-              </p>
+          <div className="login-reveal-copy mt-8 flex flex-wrap gap-3 text-xs font-bold uppercase tracking-[0.22em] text-white/78">
+            <span className="border border-white/18 bg-white/8 px-3 py-2 backdrop-blur">Patrol</span>
+            <span className="border border-white/18 bg-white/8 px-3 py-2 backdrop-blur">Incident</span>
+            <span className="border border-white/18 bg-white/8 px-3 py-2 backdrop-blur">Access Control</span>
+          </div>
+        </div>
+
+        <div className="login-reveal-panel login-panel mx-auto w-full max-w-[440px] p-px shadow-[0_36px_100px_rgba(0,0,0,0.55)] lg:translate-x-8">
+          <div className="relative overflow-hidden px-7 py-7 sm:px-9">
+            <div className="login-scan pointer-events-none absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-transparent via-white/12 to-transparent" />
+            <div className="flex items-start justify-between gap-5">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.34em] text-[var(--port-amber)]">
+                  Secure Access
+                </p>
+                <h2 className="mt-3 text-2xl font-black tracking-normal text-white">تسجيل الدخول الأمني</h2>
+                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
+                  Identity verification
+                </p>
+              </div>
+              <div className="login-pulse grid h-14 w-14 place-items-center border border-[var(--port-gold)] bg-[rgba(244,197,106,0.12)] text-2xl font-black text-[var(--port-amber)]">
+                ◈
+              </div>
             </div>
 
-            <div className="bg-white/90 px-9 py-6 backdrop-blur-md">
-              <div className="mx-auto grid h-16 w-16 place-items-center rounded-full border-4 border-[#0b2540] text-3xl font-bold text-[#0b2540]">
-                ⌾
-              </div>
-              <LoginForm />
+            <div className="mt-7 h-px bg-gradient-to-r from-transparent via-[var(--port-gold)] to-transparent" />
+            <LoginForm />
+            <div className="mt-6 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.26em] text-white/44">
+              <span>DPW-SMS</span>
+              <span>Encrypted Session</span>
             </div>
           </div>
         </div>
