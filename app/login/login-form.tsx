@@ -19,9 +19,6 @@ const formCopy = {
     passwordPlaceholder: "اكتب كلمة المرور",
     submit: "تسجيل الدخول",
     submitting: "جاري الدخول...",
-    secure: "دخول آمن",
-    forgot: "نسيت كلمة المرور؟",
-    register: "تسجيل مستخدم جديد",
     error: "فشل تسجيل الدخول.",
   },
   en: {
@@ -31,9 +28,6 @@ const formCopy = {
     passwordPlaceholder: "Enter passcode",
     submit: "Sign in",
     submitting: "Signing in...",
-    secure: "Secure login",
-    forgot: "Forgot passcode?",
-    register: "Register new user",
     error: "Login failed.",
   },
 } satisfies Record<Language, Record<string, string>>;
@@ -82,7 +76,7 @@ export function LoginForm({ language }: { language: Language }) {
         </span>
         <input
           className={`focus-ring h-12 w-full border border-white/16 bg-white/10 px-4 text-sm font-semibold text-white shadow-[inset_0_1px_18px_rgba(255,255,255,0.04)] outline-none backdrop-blur placeholder:text-white/42 ${
-            isArabic ? "pr-11 text-right" : "pl-11 text-left"
+            isArabic ? "pr-12 text-right" : "pl-12 text-left"
           }`}
           dir={isArabic ? "rtl" : "ltr"}
           name="email"
@@ -91,13 +85,7 @@ export function LoginForm({ language }: { language: Language }) {
           autoComplete="email"
           required
         />
-        <span
-          className={`pointer-events-none absolute bottom-3 text-[10px] font-black text-[var(--port-amber)] ${
-            isArabic ? "right-3" : "left-3"
-          }`}
-        >
-          ID
-        </span>
+        <UserIcon className={`pointer-events-none absolute bottom-3 h-5 w-5 text-[var(--port-amber)] ${isArabic ? "right-4" : "left-4"}`} />
       </label>
 
       <label className="relative block">
@@ -110,7 +98,7 @@ export function LoginForm({ language }: { language: Language }) {
         </span>
         <input
           className={`focus-ring h-12 w-full border border-white/16 bg-white/10 px-4 text-sm font-semibold text-white shadow-[inset_0_1px_18px_rgba(255,255,255,0.04)] outline-none backdrop-blur placeholder:text-white/42 ${
-            isArabic ? "pr-11 text-right" : "pl-11 text-left"
+            isArabic ? "pr-12 text-right" : "pl-12 text-left"
           }`}
           dir={isArabic ? "rtl" : "ltr"}
           name="password"
@@ -119,13 +107,7 @@ export function LoginForm({ language }: { language: Language }) {
           autoComplete="current-password"
           required
         />
-        <span
-          className={`pointer-events-none absolute bottom-3 text-[10px] font-black text-[var(--port-amber)] ${
-            isArabic ? "right-3" : "left-3"
-          }`}
-        >
-          PW
-        </span>
+        <LockIcon className={`pointer-events-none absolute bottom-3 h-5 w-5 text-[var(--port-amber)] ${isArabic ? "right-4" : "left-4"}`} />
       </label>
 
       {error ? <p className="border border-red-300/40 bg-red-950/50 px-3 py-2 text-sm font-semibold text-red-100">{error}</p> : null}
@@ -137,5 +119,24 @@ export function LoginForm({ language }: { language: Language }) {
         {isSubmitting ? text.submitting : text.submit}
       </button>
     </form>
+  );
+}
+
+function UserIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M4.5 20a7.5 7.5 0 0 1 15 0" stroke="currentColor" strokeLinecap="round" strokeWidth="1.8" />
+    </svg>
+  );
+}
+
+function LockIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M7 10V8a5 5 0 0 1 10 0v2" stroke="currentColor" strokeLinecap="round" strokeWidth="1.8" />
+      <path d="M6 10h12v10H6V10Z" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M12 14v2.5" stroke="currentColor" strokeLinecap="round" strokeWidth="1.8" />
+    </svg>
   );
 }
