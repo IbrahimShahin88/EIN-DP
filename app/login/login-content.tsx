@@ -7,8 +7,8 @@ type Language = "ar" | "en";
 
 const copy = {
   ar: {
-    eyebrow: "قيادة أمن الميناء",
-    title: "بوابة الأمن",
+    eyebrow: "",
+    title: "نؤمن عالمنا الملئ بالنجاحات",
     description: "دخول مخصص للفرق المصرح لها بمتابعة المهام الأمنية، الدوريات، والبلاغات التشغيلية.",
     tags: ["دوريات", "بلاغات", "تصاريح دخول"],
     panelEyebrow: "دخول آمن",
@@ -72,9 +72,11 @@ export function LoginContent() {
           </div>
 
           <div className={`login-reveal-copy mt-10 max-w-xl ${isArabic ? "text-right" : "text-left"}`}>
-            <p className="text-sm font-bold uppercase tracking-[0.36em] text-[var(--port-amber)]">
-              {text.eyebrow}
-            </p>
+            {text.eyebrow ? (
+              <p className="text-sm font-bold uppercase tracking-[0.36em] text-[var(--port-amber)]">
+                {text.eyebrow}
+              </p>
+            ) : null}
             <h1 className="login-display mt-4 text-5xl font-black uppercase leading-[0.96] tracking-normal text-white drop-shadow-[0_18px_35px_rgba(0,0,0,0.5)] sm:text-6xl lg:text-7xl">
               {text.title}
             </h1>
