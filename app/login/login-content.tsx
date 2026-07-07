@@ -77,7 +77,11 @@ export function LoginContent() {
                 {text.eyebrow}
               </p>
             ) : null}
-            <h1 className="login-display mt-4 text-5xl font-black uppercase leading-[0.96] tracking-normal text-white drop-shadow-[0_18px_35px_rgba(0,0,0,0.5)] sm:text-6xl lg:text-7xl">
+            <h1
+              className={`login-display mt-4 font-black uppercase tracking-normal text-white drop-shadow-[0_18px_35px_rgba(0,0,0,0.5)] ${
+                isArabic ? "text-3xl leading-[1.18] sm:text-4xl lg:text-5xl" : "text-5xl leading-[0.96] sm:text-6xl lg:text-7xl"
+              }`}
+            >
               {text.title}
             </h1>
             <p className="mt-6 max-w-lg text-base font-semibold leading-8 text-white/74">
