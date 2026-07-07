@@ -16,7 +16,7 @@ const copy = {
   },
   en: {
     eyebrow: "",
-    title: "Securing our world full of achievements",
+    title: "Securing a world of success",
     description: "Dedicated access for authorized teams to manage security tasks, patrols, and operational reports.",
     tags: [],
     switchLabel: "العربية",
@@ -42,7 +42,7 @@ export function LoginContent() {
       <div className="login-grid absolute inset-0" />
       <div className="login-grain absolute inset-0" />
 
-      <section className="relative z-10 mx-auto grid min-h-screen w-full max-w-7xl items-center px-5 py-8 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:px-12">
+      <section className="relative z-10 mx-auto grid min-h-screen w-full max-w-7xl items-center gap-8 px-5 py-8 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 lg:px-12">
         <div className="max-w-2xl pb-8 pt-4 lg:-translate-y-8">
           <div className="login-reveal-mark flex items-start justify-between gap-5">
             <img
