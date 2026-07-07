@@ -22,10 +22,12 @@ export default async function LoginPage() {
       <section className="relative z-10 mx-auto grid min-h-screen w-full max-w-7xl items-center px-5 py-8 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:px-12">
         <div className="max-w-2xl pb-8 pt-4 lg:-translate-y-8">
           <div className="login-reveal-mark flex items-center gap-5">
-            <div className="grid h-24 w-24 place-items-center rounded-full bg-[conic-gradient(from_210deg,#f4c56a,#0a76a9,#082642,#f4c56a)] p-1 shadow-[0_24px_70px_rgba(0,0,0,0.42)]">
-              <div className="grid h-full w-full place-items-center rounded-full bg-[var(--port-ink)] text-3xl font-black text-[var(--port-amber)]">
-                DP
-              </div>
+            <div className="w-56 border border-white/25 bg-white p-4 shadow-[0_24px_70px_rgba(0,0,0,0.42)]">
+              <img
+                src="/dp-world-logo.jpg"
+                alt="DP World"
+                className="h-auto w-full object-contain"
+              />
             </div>
             <div className="h-px flex-1 bg-gradient-to-r from-[var(--port-gold)] via-white/30 to-transparent" />
           </div>
@@ -34,8 +36,8 @@ export default async function LoginPage() {
             <p className="text-sm font-bold uppercase tracking-[0.42em] text-[var(--port-amber)]">
               Port Security Command
             </p>
-            <h1 className="login-display mt-4 max-w-xl text-6xl font-black uppercase leading-[0.92] tracking-normal text-white drop-shadow-[0_18px_35px_rgba(0,0,0,0.5)] sm:text-7xl lg:text-8xl">
-              DP World
+            <h1 className="login-display mt-4 max-w-xl text-5xl font-black uppercase leading-[0.96] tracking-normal text-white drop-shadow-[0_18px_35px_rgba(0,0,0,0.5)] sm:text-6xl lg:text-7xl">
+              Security Gate
             </h1>
             <div className="mt-6 max-w-xl border-r-2 border-[var(--port-gold)] pr-5 text-right">
               <p className="text-2xl font-bold leading-9 text-white">بوابة إدارة الأمن بالميناء</p>
@@ -65,8 +67,8 @@ export default async function LoginPage() {
                   Identity verification
                 </p>
               </div>
-              <div className="login-pulse grid h-14 w-14 place-items-center border border-[var(--port-gold)] bg-[rgba(244,197,106,0.12)] text-2xl font-black text-[var(--port-amber)]">
-                ◈
+              <div className="login-pulse grid h-16 w-16 place-items-center border border-[var(--port-gold)] bg-white p-2">
+                <img src="/dp-world-logo.jpg" alt="DP World" className="h-full w-full object-contain" />
               </div>
             </div>
 
