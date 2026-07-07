@@ -71,7 +71,7 @@ export function LoginForm({ language }: { language: Language }) {
   }
 
   return (
-    <form className="mt-7 grid gap-4" onSubmit={onSubmit}>
+    <form className="grid gap-4" onSubmit={onSubmit}>
       <label className="relative block">
         <span
           className={`mb-2 block text-sm font-bold text-white/86 ${

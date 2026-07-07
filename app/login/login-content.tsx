@@ -99,17 +99,6 @@ export function LoginContent() {
         <div className="login-reveal-panel login-panel mx-auto w-full max-w-[440px] p-px shadow-[0_36px_100px_rgba(0,0,0,0.55)] lg:translate-x-8">
           <div className="relative overflow-hidden px-7 py-7 sm:px-9">
             <div className="login-scan pointer-events-none absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-transparent via-white/12 to-transparent" />
-            <div className={isArabic ? "text-right" : "text-left"}>
-              <p className="text-xs font-bold uppercase tracking-[0.34em] text-[var(--port-amber)]">
-                {text.panelEyebrow}
-              </p>
-              <h2 className="mt-3 text-2xl font-black tracking-normal text-white">{text.panelTitle}</h2>
-              <p className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
-                {text.panelHint}
-              </p>
-            </div>
-
-            <div className="mt-7 h-px bg-gradient-to-r from-transparent via-[var(--port-gold)] to-transparent" />
             <LoginForm language={language} />
             <div className="mt-6 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.26em] text-white/44">
               <span>{text.footerLeft}</span>
