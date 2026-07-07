@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-type Language = "ar" | "en";
-
 const roleRedirects: Record<string, string> = {
   admin: "/admin",
   supervisor: "/supervisor",
@@ -11,42 +9,13 @@ const roleRedirects: Record<string, string> = {
   management: "/dashboard",
 };
 
-const formCopy = {
-  ar: {
-    userLabel: "اسم المستخدم",
-    userPlaceholder: "اكتب اسم المستخدم",
-    passwordLabel: "كلمة المرور",
-    passwordPlaceholder: "اكتب كلمة المرور",
-    submit: "تسجيل الدخول",
-    submitting: "جاري الدخول...",
-    secure: "دخول آمن",
-    forgot: "نسيت كلمة المرور؟",
-    register: "تسجيل مستخدم جديد",
-    error: "فشل تسجيل الدخول.",
-  },
-  en: {
-    userLabel: "User ID",
-    userPlaceholder: "Enter user ID",
-    passwordLabel: "Passcode",
-    passwordPlaceholder: "Enter passcode",
-    submit: "Sign in",
-    submitting: "Signing in...",
-    secure: "Secure login",
-    forgot: "Forgot passcode?",
-    register: "Register new user",
-    error: "Login failed.",
-  },
-} satisfies Record<Language, Record<string, string>>;
-
-export function LoginForm({ language }: { language: Language }) {
-  const [error, setError] = useState("");
+export function LoginForm() {
+  const [hasError, setHasError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const isArabic = language === "ar";
-  const text = formCopy[language];
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setError("");
+    setHasError(false);
     setIsSubmitting(true);
 
     const formData = new FormData(event.currentTarget);
@@ -59,11 +28,11 @@ export function LoginForm({ language }: { language: Language }) {
       }),
     });
 
-    const payload = (await response.json()) as { role?: string; error?: string };
+    const payload = (await response.json()) as { role?: string };
     setIsSubmitting(false);
 
     if (!response.ok || !payload.role) {
-      setError(payload.error ?? text.error);
+      setHasError(true);
       return;
     }
 
@@ -71,90 +40,49 @@ export function LoginForm({ language }: { language: Language }) {
   }
 
   return (
-    <form className="mt-7 grid gap-4" onSubmit={onSubmit}>
+    <form className="grid gap-5" onSubmit={onSubmit}>
       <label className="relative block">
-        <span
-          className={`mb-2 block text-sm font-bold text-white/86 ${
-            isArabic ? "text-right" : "text-left uppercase tracking-[0.18em]"
-          }`}
-        >
-          {text.userLabel}
-        </span>
+        <span className="sr-only">User ID</span>
         <input
-          className={`focus-ring h-12 w-full border border-white/16 bg-white/10 px-4 text-sm font-semibold text-white shadow-[inset_0_1px_18px_rgba(255,255,255,0.04)] outline-none backdrop-blur placeholder:text-white/42 ${
-            isArabic ? "pr-11 text-right" : "pl-11 text-left"
-          }`}
-          dir={isArabic ? "rtl" : "ltr"}
+          className="focus-ring h-12 w-full border border-white/16 bg-white/10 px-4 pl-12 text-left text-sm font-semibold text-white shadow-[inset_0_1px_18px_rgba(255,255,255,0.04)] outline-none backdrop-blur"
+          dir="ltr"
           name="email"
           type="email"
-          placeholder={text.userPlaceholder}
           autoComplete="email"
+          aria-label="User ID"
           required
         />
-        <span
-          className={`pointer-events-none absolute bottom-3 text-[10px] font-black text-[var(--port-amber)] ${
-            isArabic ? "right-3" : "left-3"
-          }`}
-        >
-          ID
-        </span>
+        <span className="pointer-events-none absolute left-4 top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-[var(--port-amber)] shadow-[0_0_16px_rgba(244,197,106,0.8)]" />
       </label>
 
       <label className="relative block">
-        <span
-          className={`mb-2 block text-sm font-bold text-white/86 ${
-            isArabic ? "text-right" : "text-left uppercase tracking-[0.18em]"
-          }`}
-        >
-          {text.passwordLabel}
-        </span>
+        <span className="sr-only">Passcode</span>
         <input
-          className={`focus-ring h-12 w-full border border-white/16 bg-white/10 px-4 text-sm font-semibold text-white shadow-[inset_0_1px_18px_rgba(255,255,255,0.04)] outline-none backdrop-blur placeholder:text-white/42 ${
-            isArabic ? "pr-11 text-right" : "pl-11 text-left"
-          }`}
-          dir={isArabic ? "rtl" : "ltr"}
+          className="focus-ring h-12 w-full border border-white/16 bg-white/10 px-4 pl-12 text-left text-sm font-semibold text-white shadow-[inset_0_1px_18px_rgba(255,255,255,0.04)] outline-none backdrop-blur"
+          dir="ltr"
           name="password"
           type="password"
-          placeholder={text.passwordPlaceholder}
           autoComplete="current-password"
+          aria-label="Passcode"
           required
         />
-        <span
-          className={`pointer-events-none absolute bottom-3 text-[10px] font-black text-[var(--port-amber)] ${
-            isArabic ? "right-3" : "left-3"
-          }`}
-        >
-          PW
-        </span>
+        <span className="pointer-events-none absolute left-4 top-1/2 h-3 w-3 -translate-y-1/2 border-2 border-[var(--port-amber)] shadow-[0_0_16px_rgba(244,197,106,0.45)]" />
       </label>
 
-      {error ? <p className="border border-red-300/40 bg-red-950/50 px-3 py-2 text-sm font-semibold text-red-100">{error}</p> : null}
+      {hasError ? <div className="h-1 w-full bg-red-400/80" aria-hidden="true" /> : null}
 
       <button
-        className="focus-ring mt-2 border border-[var(--port-amber)] bg-[linear-gradient(135deg,#f4c56a,#b67a24)] px-4 py-3 text-lg font-black text-[var(--port-ink)] shadow-[0_18px_35px_rgba(244,197,106,0.25)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
+        className="focus-ring mt-1 grid h-14 place-items-center border border-[var(--port-amber)] bg-[linear-gradient(135deg,#f4c56a,#b67a24)] text-[var(--port-ink)] shadow-[0_18px_35px_rgba(244,197,106,0.25)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
         disabled={isSubmitting}
+        aria-label="Sign in"
       >
-        {isSubmitting ? text.submitting : text.submit}
+        <span
+          className={`block h-4 w-4 rotate-45 border-r-4 border-t-4 border-[var(--port-ink)] ${
+            isSubmitting ? "animate-pulse" : ""
+          }`}
+          aria-hidden="true"
+        />
       </button>
-
-      <div className={`mt-2 grid gap-4 border-t border-white/10 pt-4 ${isArabic ? "text-right" : "text-left"}`}>
-        <div className={`flex items-center gap-2 ${isArabic ? "justify-end" : "justify-start"}`}>
-          <span className="grid h-8 w-8 place-items-center rounded-full border border-[var(--port-amber)] text-[10px] font-black text-[var(--port-amber)]">
-            OK
-          </span>
-          <span className="text-[10px] font-black uppercase leading-3 tracking-[0.18em] text-white/60">
-            {text.secure}
-          </span>
-        </div>
-        <div className="grid gap-2 text-xs font-medium text-white/72">
-          <a className="hover:text-[var(--port-amber)]" href="#">
-            {text.forgot}
-          </a>
-          <a className="hover:text-[var(--port-amber)]" href="#">
-            {text.register}
-          </a>
-        </div>
-      </div>
     </form>
   );
 }
