@@ -3,7 +3,9 @@ import { CoreFunctions } from "@/components/CoreFunctions";
 import { MetricCard } from "@/components/MetricCard";
 import { OperatingDoctrine } from "@/components/OperatingDoctrine";
 import { RoleMatrix } from "@/components/RoleMatrix";
+import { SecurityStructurePanel } from "@/components/SecurityStructurePanel";
 import { Shell } from "@/components/Shell";
+import { TaskOperationsPanel } from "@/components/TaskOperationsPanel";
 import { requireRole } from "@/lib/auth";
 import { query } from "@/lib/db";
 import { AdminUserForm } from "./admin-user-form";
@@ -74,6 +76,8 @@ export default async function AdminPage() {
       <OperatingDoctrine />
       <RoleMatrix />
       <CoreFunctions />
+      <SecurityStructurePanel />
+      <TaskOperationsPanel />
       <div className="grid gap-4 md:grid-cols-3">
         <MetricCard label="Active sites" value={String(overview.activeSites)} hint="Operational locations" />
         <MetricCard label="Users" value={String(overview.activeUsers)} hint="Created by Admin only" />

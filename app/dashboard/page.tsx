@@ -1,5 +1,6 @@
 import { EmptyState } from "@/components/EmptyState";
 import { CoreFunctions } from "@/components/CoreFunctions";
+import { DashboardSummaryPanel } from "@/components/DashboardSummaryPanel";
 import { MetricCard } from "@/components/MetricCard";
 import { RoleMatrix } from "@/components/RoleMatrix";
 import { Shell } from "@/components/Shell";
@@ -21,6 +22,7 @@ export default async function DashboardPage() {
         <MetricCard label="SLA breaches" value="0" hint="Late or escalated work" />
         <MetricCard label="Open incidents" value="0" hint="Active security reports" />
       </div>
+      <DashboardSummaryPanel />
       <CoreFunctions />
       <RoleMatrix />
       <EmptyState

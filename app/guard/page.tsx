@@ -1,4 +1,5 @@
 import { EmptyState } from "@/components/EmptyState";
+import { GuardOperationsPanel } from "@/components/GuardOperationsPanel";
 import { MetricCard } from "@/components/MetricCard";
 import { Shell } from "@/components/Shell";
 import { requireRole } from "@/lib/auth";
@@ -18,6 +19,7 @@ export default async function GuardPage() {
         <MetricCard label="QR scans" value="0" hint="Checkpoint evidence trail" />
         <MetricCard label="Incidents" value="0" hint="Reports submitted today" />
       </div>
+      <GuardOperationsPanel />
       <section className="grid gap-4 md:grid-cols-2">
         <EmptyState
           title="Field execution"
