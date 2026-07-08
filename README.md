@@ -19,6 +19,100 @@ AYN turns verbal and paper-based security follow-up into a live operational syst
 
 Public registration is intentionally disabled. Users are created by Admin only because AYN is a closed security system, not an open public app.
 
+## Core Functions
+
+### Security Site Structure
+
+AYN models every secured location as:
+
+```text
+Client -> Site -> Zone -> Checkpoint
+```
+
+Example:
+
+```text
+Company / Mall
+-> 20 West Mall
+-> Parking Zone
+-> Gate 01 / Fire Exit / CCTV Room / Roof Access
+```
+
+Every checkpoint has its own QR code for patrol proof.
+
+### Security Tasks
+
+Task types in V1:
+
+| Type | Example |
+| --- | --- |
+| Patrol Task | Visit selected checkpoints every hour. |
+| Fixed Post Task | Confirm presence at a gate or entrance. |
+| Incident Task | Fight, theft, unauthorized access. |
+| Checklist Task | Fire extinguishers, emergency doors, exits. |
+| Escort Task | Escort visitor or contractor. |
+| Urgent Task | Immediate supervisor intervention. |
+
+Task status flow:
+
+```text
+Pending -> In Progress -> Submitted -> Approved / Rejected / Escalated
+```
+
+### QR Patrol
+
+When a guard scans a checkpoint QR code, AYN records:
+
+- Guard name
+- Checkpoint
+- Time
+- GPS when available
+- Optional image
+- Note
+- Late/on-time flag
+
+### Incidents
+
+Incident reports include:
+
+- Incident type
+- Severity: `Low`, `Medium`, `High`, `Critical`
+- Location
+- Description
+- Images
+- Action taken
+- Escalation
+- Closure status
+
+### Dashboard
+
+Management dashboard tracks:
+
+- Tasks today
+- Completion rate
+- Late tasks
+- Open incidents
+- Guard performance
+- Most problematic checkpoints
+- Incidents by severity
+- Patrol compliance %
+
+## MVP V1 Scope
+
+The first production version stays simple and strong:
+
+- Login
+- Users & roles
+- Sites / zones / checkpoints
+- Create task
+- Guard task list
+- QR check-in
+- Incident report
+- Supervisor approval
+- Basic dashboard
+
+V2 candidates include AI, Walkie Talkie, Face Recognition, Maps, and native mobile apps.
+
 Sprint 1 delivers:
 
 - Next.js App Router + TypeScript + Tailwind CSS
@@ -95,9 +189,14 @@ Open `http://localhost:3000/login`.
 - `GET /api/health/db`
 - `GET /api/dashboard/summary`
 - `GET/POST /api/users` (admin only)
+- `GET/POST /api/clients`
+- `GET/POST /api/sites`
+- `GET/POST /api/zones`
 - `GET/POST /api/tasks`
+- `POST /api/tasks/:id/approval`
 - `GET/POST /api/incidents`
 - `GET/POST /api/checkpoints`
+- `POST /api/qr-checkins`
 
 ## Vercel
 

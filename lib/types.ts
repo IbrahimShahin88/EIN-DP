@@ -18,4 +18,15 @@ export type TaskStatus =
   | "rejected"
   | "escalated";
 
+export const taskTypes = [
+  "patrol",
+  "fixed_post",
+  "incident",
+  "checklist",
+  "escort",
+  "urgent",
+] as const;
+
+export type TaskType = (typeof taskTypes)[number];
+
 export type IncidentSeverity = "low" | "medium" | "high" | "critical";

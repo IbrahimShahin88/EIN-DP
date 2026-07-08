@@ -1,4 +1,5 @@
 import type { RowDataPacket } from "mysql2";
+import { CoreFunctions } from "@/components/CoreFunctions";
 import { MetricCard } from "@/components/MetricCard";
 import { OperatingDoctrine } from "@/components/OperatingDoctrine";
 import { RoleMatrix } from "@/components/RoleMatrix";
@@ -72,6 +73,7 @@ export default async function AdminPage() {
     >
       <OperatingDoctrine />
       <RoleMatrix />
+      <CoreFunctions />
       <div className="grid gap-4 md:grid-cols-3">
         <MetricCard label="Active sites" value={String(overview.activeSites)} hint="Operational locations" />
         <MetricCard label="Users" value={String(overview.activeUsers)} hint="Created by Admin only" />

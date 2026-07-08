@@ -52,3 +52,29 @@ export function optionalNumber(value: unknown) {
 
   return numberValue;
 }
+
+export function requireNumber(value: unknown, field: string) {
+  const numberValue = optionalNumber(value);
+  if (numberValue === null || !Number.isInteger(numberValue)) {
+    throw new Error(`${field} is required.`);
+  }
+
+  return numberValue;
+}
+
+export function requireEnum<T extends readonly string[]>(value: unknown, field: string, allowed: T): T[number] {
+  const text = requireString(value, field, 100);
+  if (!allowed.includes(text)) {
+    throw new Error(`${field} is invalid.`);
+  }
+
+  return text;
+}
+
+export function optionalEnum<T extends readonly string[]>(value: unknown, allowed: T, fallback: T[number]): T[number] {
+  if (value === undefined || value === null || value === "") {
+    return fallback;
+  }
+
+  return requireEnum(value, "value", allowed);
+}

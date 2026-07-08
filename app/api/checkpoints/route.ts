@@ -1,14 +1,30 @@
 import { NextResponse } from "next/server";
+import { randomUUID } from "crypto";
 import { requireUser } from "@/lib/auth";
 import { query } from "@/lib/db";
-import { optionalString, requireString } from "@/lib/validators";
+import { optionalString, requireNumber, requireString } from "@/lib/validators";
 
 export async function GET() {
   await requireUser();
 
   const checkpoints = await query(`
-    SELECT checkpoints.id, checkpoints.zone_id, checkpoints.name, checkpoints.qr_code, checkpoints.location_note, checkpoints.status, checkpoints.created_at
+    SELECT
+      checkpoints.id,
+      checkpoints.zone_id,
+      zones.name AS zone_name,
+      sites.id AS site_id,
+      sites.name AS site_name,
+      clients.id AS client_id,
+      clients.name AS client_name,
+      checkpoints.name,
+      checkpoints.qr_code,
+      checkpoints.location_note,
+      checkpoints.status,
+      checkpoints.created_at
     FROM checkpoints
+    LEFT JOIN zones ON zones.id = checkpoints.zone_id
+    LEFT JOIN sites ON sites.id = zones.site_id
+    LEFT JOIN clients ON clients.id = sites.client_id
     ORDER BY checkpoints.created_at DESC
     LIMIT 200
   `);
@@ -24,10 +40,7 @@ export async function POST(request: Request) {
 
   try {
     const body = (await request.json()) as Record<string, unknown>;
-    const zoneId = Number(body.zoneId);
-    if (!Number.isInteger(zoneId)) {
-      throw new Error("zoneId is required.");
-    }
+    const qrCode = optionalString(body.qrCode, 255) ?? `AYN-${randomUUID()}`;
 
     const result = await query(
       `
@@ -35,14 +48,14 @@ export async function POST(request: Request) {
         VALUES (?, ?, ?, ?, 'active')
       `,
       [
-        zoneId,
+        requireNumber(body.zoneId, "zoneId"),
         requireString(body.name, "name"),
-        requireString(body.qrCode, "qrCode"),
+        qrCode,
         optionalString(body.locationNote),
       ],
     );
 
-    return NextResponse.json({ ok: true, result }, { status: 201 });
+    return NextResponse.json({ ok: true, qrCode, result }, { status: 201 });
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Checkpoint creation failed." },
