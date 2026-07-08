@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import type { RowDataPacket } from "mysql2";
 import { requireUser } from "@/lib/auth";
-import { query } from "@/lib/db";
+import { isDatabaseConfigured, query } from "@/lib/db";
+import { getDemoDashboardSummary } from "@/lib/demo-store";
 
 type TaskSummaryRow = RowDataPacket & {
   tasks_today: number;
@@ -49,6 +50,10 @@ export async function GET() {
   await requireUser();
 
   try {
+    if (!isDatabaseConfigured()) {
+      return NextResponse.json({ summary: getDemoDashboardSummary(), mode: "demo" });
+    }
+
     const [taskRows, incidentRows, guardPerformance, checkpointProblems, severityRows, patrolRows] =
       await Promise.all([
         query<TaskSummaryRow[]>(`

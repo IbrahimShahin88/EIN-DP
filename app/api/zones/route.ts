@@ -1,11 +1,22 @@
 import { NextResponse } from "next/server";
 import type { ResultSetHeader } from "mysql2";
 import { requireUser } from "@/lib/auth";
-import { query } from "@/lib/db";
+import { isDatabaseConfigured, query } from "@/lib/db";
+import { createDemoZone, getDemoStore } from "@/lib/demo-store";
 import { requireNumber, requireString } from "@/lib/validators";
 
 export async function GET() {
   await requireUser();
+
+  if (!isDatabaseConfigured()) {
+    const store = getDemoStore();
+    return NextResponse.json({
+      zones: store.zones.map((zone) => ({
+        ...zone,
+        site_name: store.sites.find((site) => site.id === zone.site_id)?.name ?? null,
+      })),
+    });
+  }
 
   const zones = await query(`
     SELECT zones.id, zones.site_id, sites.name AS site_name, zones.name, zones.created_at
@@ -26,12 +37,20 @@ export async function POST(request: Request) {
 
   try {
     const body = (await request.json()) as Record<string, unknown>;
+    const siteId = requireNumber(body.siteId, "siteId");
+    const name = requireString(body.name, "name");
+
+    if (!isDatabaseConfigured()) {
+      const zone = createDemoZone(siteId, name);
+      return NextResponse.json({ id: zone.id, zone }, { status: 201 });
+    }
+
     const result = await query<ResultSetHeader>(
       `
         INSERT INTO zones (site_id, name)
         VALUES (?, ?)
       `,
-      [requireNumber(body.siteId, "siteId"), requireString(body.name, "name")],
+      [siteId, name],
     );
 
     return NextResponse.json({ id: result.insertId }, { status: 201 });

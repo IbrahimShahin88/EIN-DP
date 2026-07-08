@@ -1,11 +1,27 @@
 import { NextResponse } from "next/server";
 import { requireUser } from "@/lib/auth";
-import { query } from "@/lib/db";
+import { isDatabaseConfigured, query } from "@/lib/db";
+import { createDemoTask, getDemoStore } from "@/lib/demo-store";
 import { taskTypes } from "@/lib/types";
 import { optionalEnum, optionalNumber, optionalString, requireString } from "@/lib/validators";
 
 export async function GET() {
   const user = await requireUser();
+
+  if (!isDatabaseConfigured()) {
+    const store = getDemoStore();
+    const tasks = (user.role === "guard" ? store.tasks.filter((task) => task.assigned_to === user.id) : store.tasks).map(
+      (task) => ({
+        ...task,
+        site_name: store.sites.find((site) => site.id === task.site_id)?.name ?? null,
+        checkpoint_name: store.checkpoints.find((checkpoint) => checkpoint.id === task.checkpoint_id)?.name ?? null,
+        assigned_to_name: store.users.find((demoUser) => demoUser.id === task.assigned_to)?.full_name ?? null,
+      }),
+    );
+
+    return NextResponse.json({ tasks });
+  }
+
   const params: unknown[] = [];
   let sql = `
     SELECT
@@ -55,6 +71,22 @@ export async function POST(request: Request) {
 
     if (!siteId) {
       throw new Error("siteId is required.");
+    }
+
+    if (!isDatabaseConfigured()) {
+      const task = createDemoTask({
+        siteId,
+        checkpointId: optionalNumber(body.checkpointId),
+        assignedTo: optionalNumber(body.assignedTo),
+        createdBy: user.id,
+        taskType,
+        title,
+        description: optionalString(body.description),
+        priority: optionalString(body.priority, 50) ?? "normal",
+        dueAt: optionalString(body.dueAt, 50),
+      });
+
+      return NextResponse.json({ ok: true, id: task.id, task }, { status: 201 });
     }
 
     const result = await query(

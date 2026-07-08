@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import { requireUser } from "@/lib/auth";
-import { query } from "@/lib/db";
+import { isDatabaseConfigured, query } from "@/lib/db";
+import { createDemoCheckin } from "@/lib/demo-store";
 import { optionalNumber, optionalString, requireString } from "@/lib/validators";
 
 type CheckpointRow = RowDataPacket & {
@@ -23,6 +24,26 @@ export async function POST(request: Request) {
     const body = (await request.json()) as Record<string, unknown>;
     const qrCode = requireString(body.qrCode, "qrCode", 255);
     const taskId = optionalNumber(body.taskId);
+
+    if (!isDatabaseConfigured()) {
+      const checkin = createDemoCheckin({
+        qrCode,
+        taskId,
+        guardId: user.id,
+        note: optionalString(body.note),
+        imageUrl: optionalString(body.imageUrl),
+        latitude: optionalNumber(body.latitude),
+        longitude: optionalNumber(body.longitude),
+      });
+      if (!checkin) {
+        return NextResponse.json({ error: "Checkpoint not found." }, { status: 404 });
+      }
+
+      return NextResponse.json(
+        { id: checkin.id, checkpointId: checkin.checkpoint_id, isLate: checkin.is_late },
+        { status: 201 },
+      );
+    }
 
     const checkpoints = await query<CheckpointRow[]>(
       `

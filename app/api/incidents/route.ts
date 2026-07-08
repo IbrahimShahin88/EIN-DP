@@ -1,10 +1,26 @@
 import { NextResponse } from "next/server";
 import { requireUser } from "@/lib/auth";
-import { query } from "@/lib/db";
+import { isDatabaseConfigured, query } from "@/lib/db";
+import { createDemoIncident, getDemoStore } from "@/lib/demo-store";
 import { optionalNumber, optionalString, requireString } from "@/lib/validators";
 
 export async function GET() {
   const user = await requireUser();
+
+  if (!isDatabaseConfigured()) {
+    const store = getDemoStore();
+    const incidents = (user.role === "guard" ? store.incidents.filter((incident) => incident.reported_by === user.id) : store.incidents).map(
+      (incident) => ({
+        ...incident,
+        site_name: store.sites.find((site) => site.id === incident.site_id)?.name ?? null,
+        checkpoint_name: store.checkpoints.find((checkpoint) => checkpoint.id === incident.checkpoint_id)?.name ?? null,
+        reported_by_name: store.users.find((demoUser) => demoUser.id === incident.reported_by)?.full_name ?? null,
+      }),
+    );
+
+    return NextResponse.json({ incidents });
+  }
+
   const params: unknown[] = [];
   let sql = `
     SELECT
@@ -52,6 +68,24 @@ export async function POST(request: Request) {
 
     if (!siteId) {
       throw new Error("siteId is required.");
+    }
+
+    if (!isDatabaseConfigured()) {
+      const incident = createDemoIncident({
+        site_id: siteId,
+        reported_by: user.id,
+        checkpoint_id: optionalNumber(body.checkpointId),
+        incident_type: optionalString(body.incidentType, 100) ?? "general",
+        title,
+        description: optionalString(body.description),
+        severity: optionalString(body.severity, 50) ?? "medium",
+        status: optionalString(body.status, 50) ?? "open",
+        action_taken: optionalString(body.actionTaken),
+        escalation_status: optionalString(body.escalationStatus, 50) ?? "none",
+        image_url: optionalString(body.imageUrl),
+      });
+
+      return NextResponse.json({ ok: true, id: incident.id, incident }, { status: 201 });
     }
 
     const result = await query(

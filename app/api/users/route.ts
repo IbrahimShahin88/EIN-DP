@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import { requireRole } from "@/lib/auth";
-import { query } from "@/lib/db";
+import { isDatabaseConfigured, query } from "@/lib/db";
+import { createDemoUser, getDemoStore } from "@/lib/demo-store";
 import { isRole } from "@/lib/permissions";
 import { hashPassword } from "@/lib/password";
 import { optionalNumber, requireEmail, requireString, requireStrongPassword } from "@/lib/validators";
@@ -20,6 +21,12 @@ type UserRow = RowDataPacket & {
 
 export async function GET() {
   await requireRole(["admin"]);
+
+  if (!isDatabaseConfigured()) {
+    return NextResponse.json({
+      users: getDemoStore().users.map(({ password_hash: _passwordHash, ...user }) => user),
+    });
+  }
 
   const users = await query<UserRow[]>(`
     SELECT id, site_id, full_name, email, role, status, created_at
@@ -44,6 +51,29 @@ export async function POST(request: Request) {
 
     if (!isRole(role)) {
       throw new Error("role is invalid.");
+    }
+
+    if (!isDatabaseConfigured()) {
+      const user = createDemoUser({
+        fullName,
+        email,
+        password,
+        role,
+        siteId,
+      });
+      return NextResponse.json(
+        {
+          user: {
+            id: user.id,
+            siteId: user.site_id,
+            fullName: user.full_name,
+            email: user.email,
+            role: user.role,
+            status: user.status,
+          },
+        },
+        { status: 201 },
+      );
     }
 
     const result = await query<ResultSetHeader>(

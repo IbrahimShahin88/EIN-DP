@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import type { RowDataPacket } from "mysql2";
 import { createSessionToken, sessionCookieName } from "@/lib/auth";
-import { query } from "@/lib/db";
+import { isDatabaseConfigured, query } from "@/lib/db";
+import { findDemoUser } from "@/lib/demo-store";
 import { isRole } from "@/lib/permissions";
 import { verifyPassword } from "@/lib/password";
 import { requireString } from "@/lib/validators";
@@ -21,20 +22,21 @@ export async function POST(request: Request) {
     const email = requireString(body.email, "email").toLowerCase();
     const password = requireString(body.password, "password", 512);
 
-    if (!process.env.DATABASE_URL) {
-      if (email !== "admin" || password !== "123") {
+    if (!isDatabaseConfigured()) {
+      const demoUser = findDemoUser(email);
+      if (!demoUser || !verifyPassword(password, demoUser.password_hash)) {
         return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
       }
 
-      const response = NextResponse.json({ role: "admin" });
+      const response = NextResponse.json({ role: demoUser.role });
       response.cookies.set({
         name: sessionCookieName,
         value: createSessionToken({
-          id: 0,
-          fullName: "Official Admin",
-          email: "admin",
-          role: "admin",
-          siteId: null,
+          id: demoUser.id,
+          fullName: demoUser.full_name,
+          email: demoUser.email,
+          role: demoUser.role,
+          siteId: demoUser.site_id,
         }),
         httpOnly: true,
         sameSite: "lax",

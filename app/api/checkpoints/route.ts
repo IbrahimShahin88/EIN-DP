@@ -1,11 +1,31 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { requireUser } from "@/lib/auth";
-import { query } from "@/lib/db";
+import { isDatabaseConfigured, query } from "@/lib/db";
+import { createDemoCheckpoint, getDemoStore } from "@/lib/demo-store";
 import { optionalString, requireNumber, requireString } from "@/lib/validators";
 
 export async function GET() {
   await requireUser();
+
+  if (!isDatabaseConfigured()) {
+    const store = getDemoStore();
+    return NextResponse.json({
+      checkpoints: store.checkpoints.map((checkpoint) => {
+        const zone = store.zones.find((item) => item.id === checkpoint.zone_id);
+        const site = zone ? store.sites.find((item) => item.id === zone.site_id) : null;
+        const client = site ? store.clients.find((item) => item.id === site.client_id) : null;
+        return {
+          ...checkpoint,
+          zone_name: zone?.name ?? null,
+          site_id: site?.id ?? null,
+          site_name: site?.name ?? null,
+          client_id: client?.id ?? null,
+          client_name: client?.name ?? null,
+        };
+      }),
+    });
+  }
 
   const checkpoints = await query(`
     SELECT
@@ -40,7 +60,15 @@ export async function POST(request: Request) {
 
   try {
     const body = (await request.json()) as Record<string, unknown>;
+    const zoneId = requireNumber(body.zoneId, "zoneId");
+    const name = requireString(body.name, "name");
     const qrCode = optionalString(body.qrCode, 255) ?? `AYN-${randomUUID()}`;
+    const locationNote = optionalString(body.locationNote);
+
+    if (!isDatabaseConfigured()) {
+      const checkpoint = createDemoCheckpoint({ zoneId, name, qrCode, locationNote });
+      return NextResponse.json({ ok: true, qrCode, id: checkpoint.id, checkpoint }, { status: 201 });
+    }
 
     const result = await query(
       `
@@ -48,10 +76,10 @@ export async function POST(request: Request) {
         VALUES (?, ?, ?, ?, 'active')
       `,
       [
-        requireNumber(body.zoneId, "zoneId"),
-        requireString(body.name, "name"),
+        zoneId,
+        name,
         qrCode,
-        optionalString(body.locationNote),
+        locationNote,
       ],
     );
 

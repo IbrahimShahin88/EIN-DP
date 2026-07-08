@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import type { ResultSetHeader } from "mysql2";
 import { requireUser } from "@/lib/auth";
-import { query } from "@/lib/db";
+import { isDatabaseConfigured, query } from "@/lib/db";
+import { approveDemoTask } from "@/lib/demo-store";
 import { optionalString, requireEnum } from "@/lib/validators";
 
 const approvalStatuses = ["approved", "rejected", "escalated"] as const;
@@ -22,6 +23,14 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const body = (await request.json()) as Record<string, unknown>;
     const status = requireEnum(body.status, "status", approvalStatuses);
     const note = optionalString(body.note);
+
+    if (!isDatabaseConfigured()) {
+      const task = approveDemoTask(taskId, status);
+      if (!task) {
+        return NextResponse.json({ error: "Task not found." }, { status: 404 });
+      }
+      return NextResponse.json({ ok: true, status, note });
+    }
 
     const result = await query<ResultSetHeader>(
       `
