@@ -80,9 +80,9 @@ export function LoginForm({ language }: { language: Language }) {
           }`}
           dir={isArabic ? "rtl" : "ltr"}
           name="email"
-          type="email"
+          type="text"
           placeholder={text.userPlaceholder}
-          autoComplete="email"
+          autoComplete="username"
           required
         />
         <UserIcon className={`pointer-events-none absolute bottom-3 h-5 w-5 text-[var(--port-amber)] ${isArabic ? "right-4" : "left-4"}`} />

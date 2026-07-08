@@ -45,6 +45,14 @@ INSERT INTO users (full_name, email, password_hash, role, status)
 VALUES ('AYN Admin', 'admin@example.com', 'PASTE_HASH_HERE', 'admin', 'active');
 ```
 
+Or seed/update a bootstrap admin through the app script when `DATABASE_URL` is available:
+
+```bash
+npm run seed-admin -- "admin" "123"
+```
+
+Use `123` only as a temporary bootstrap password, then replace it with a stronger password.
+
 After that first bootstrap account, create all additional users from `/admin`. Public registration is intentionally not available.
 
 6. Start the app:
