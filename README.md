@@ -1,6 +1,23 @@
 # AYN Security Tasks
 
-AYN Security is a Web/PWA-ready foundation for security task management across malls, factories, compounds, and logistics sites.
+AYN Security is a Web/PWA-ready security operations platform for malls, factories, compounds, ports, and logistics sites.
+
+The product vision is simple:
+
+> العين ترى، تسجل، تصعّد، وتغلق المهمة بالدليل.
+
+AYN turns verbal and paper-based security follow-up into a live operational system where every task, QR checkpoint, incident, escalation, and closure has an accountable evidence trail.
+
+## Operating Roles
+
+| Role | Function |
+| --- | --- |
+| Admin | Create sites, users, checkpoints, and permissions. |
+| Security Supervisor | Assign tasks, monitor patrols, review incidents, and escalate when needed. |
+| Security Guard | Execute tasks, scan QR checkpoints, upload images, and record notes. |
+| Management | View dashboards, KPIs, reports, SLA status, and escalations. |
+
+Public registration is intentionally disabled. Users are created by Admin only because AYN is a closed security system, not an open public app.
 
 Sprint 1 delivers:
 

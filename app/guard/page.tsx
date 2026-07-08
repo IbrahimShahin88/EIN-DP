@@ -9,16 +9,25 @@ export default async function GuardPage() {
   return (
     <Shell
       user={user}
-      title="Guard Tasks"
-      subtitle="واجهة الحارس ستكون بسيطة وسريعة: بدء وردية، مسح QR، عرض المهام، وإرسال البلاغات."
+      title="Guard Field Tasks"
+      subtitle="واجهة تنفيذ ميدانية بسيطة: استلام المهمة، مسح QR، رفع صورة أو ملاحظة، وإرسال البلاغ عند وجود خطر."
       navItems={["Start Shift", "Scan QR", "My Tasks", "Report Incident", "Emergency / SOS", "End Shift"]}
     >
       <div className="grid gap-4 md:grid-cols-3">
-        <MetricCard label="My tasks" value="0" hint="Assigned tasks will show here" />
-        <MetricCard label="QR scans" value="0" hint="Checkpoint check-ins next" />
+        <MetricCard label="My tasks" value="0" hint="Assigned tasks for this guard" />
+        <MetricCard label="QR scans" value="0" hint="Checkpoint evidence trail" />
         <MetricCard label="Incidents" value="0" hint="Reports submitted today" />
       </div>
-      <EmptyState title="Guard app shell is ready" description="The next sprint can connect this page to real tasks, QR check-ins, and incident reports." />
+      <section className="grid gap-4 md:grid-cols-2">
+        <EmptyState
+          title="Field execution"
+          description="الحارس لا يحتاج لوحة معقدة. يحتاج قائمة مهام واضحة، زر مسح QR، رفع صورة، وملاحظة قصيرة تثبت التنفيذ."
+        />
+        <EmptyState
+          title="Evidence first"
+          description="كل مهمة يجب أن تنتهي بدليل: وقت التنفيذ، نقطة التفتيش، صورة عند الحاجة، وملاحظة قابلة للمراجعة."
+        />
+      </section>
     </Shell>
   );
 }

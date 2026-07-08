@@ -1,5 +1,6 @@
 import { EmptyState } from "@/components/EmptyState";
 import { MetricCard } from "@/components/MetricCard";
+import { RoleMatrix } from "@/components/RoleMatrix";
 import { Shell } from "@/components/Shell";
 import { requireRole } from "@/lib/auth";
 
@@ -10,16 +11,20 @@ export default async function DashboardPage() {
     <Shell
       user={user}
       title="Management Dashboard"
-      subtitle="لوحة الإدارة ستعرض مؤشرات الأداء، الالتزام بالدوريات، البلاغات المفتوحة، والمهام المتأخرة."
-      navItems={["Dashboard", "Sites", "Tasks", "Incidents", "Reports", "Settings"]}
+      subtitle="لوحة قيادة للإدارة تتابع الأداء، الالتزام بالدوريات، البلاغات المفتوحة، SLA، والتصعيدات عبر المواقع."
+      navItems={["Dashboard", "Sites", "Tasks", "Incidents", "SLA", "Reports"]}
     >
       <div className="grid gap-4 md:grid-cols-4">
-        <MetricCard label="Tasks today" value="0" hint="No task data yet" />
-        <MetricCard label="Completion" value="0%" hint="Patrol compliance pending" />
-        <MetricCard label="Late tasks" value="0" hint="SLA tracking next" />
-        <MetricCard label="Open incidents" value="0" hint="Incident API ready" />
+        <MetricCard label="Tasks today" value="0" hint="Operational workload" />
+        <MetricCard label="Completion" value="0%" hint="Patrol and task compliance" />
+        <MetricCard label="SLA breaches" value="0" hint="Late or escalated work" />
+        <MetricCard label="Open incidents" value="0" hint="Active security reports" />
       </div>
-      <EmptyState title="Dashboard foundation is ready" description="Once task and incident data are added, this page can show live operational KPIs." />
+      <RoleMatrix />
+      <EmptyState
+        title="Management view"
+        description="الإدارة لا تنفذ المهام اليومية، لكنها ترى الحقيقة التشغيلية: من تأخر، أين حدث التصعيد، وما الدليل الذي أغلق المهمة."
+      />
     </Shell>
   );
 }

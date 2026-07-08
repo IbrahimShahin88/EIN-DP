@@ -33,7 +33,7 @@ export function Shell({
         </aside>
         <section className="space-y-6">
           <div>
-            <p className="text-sm font-semibold text-field">عين | AYN</p>
+            <p className="text-sm font-semibold text-field">عين | AYN Security</p>
             <h1 className="mt-2 text-3xl font-bold tracking-normal text-ink">{title}</h1>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">{subtitle}</p>
           </div>

@@ -1,5 +1,6 @@
 import { EmptyState } from "@/components/EmptyState";
 import { MetricCard } from "@/components/MetricCard";
+import { OperatingDoctrine } from "@/components/OperatingDoctrine";
 import { Shell } from "@/components/Shell";
 import { requireRole } from "@/lib/auth";
 
@@ -9,16 +10,20 @@ export default async function SupervisorPage() {
   return (
     <Shell
       user={user}
-      title="Supervisor Workspace"
-      subtitle="مساحة المشرف لمتابعة المهام والبلاغات والاعتمادات. تم تجهيزها كأساس فارغ للمرحلة التالية."
+      title="Security Supervisor Workspace"
+      subtitle="توزيع المهام، متابعة الدوريات، مراجعة البلاغات، والتصعيد عند الحاجة قبل أن تتحول المشكلة إلى خطر تشغيلي."
       navItems={["Live Tasks", "Assign Task", "Patrol Status", "Incidents", "Approvals", "Daily Report"]}
     >
+      <OperatingDoctrine />
       <div className="grid gap-4 md:grid-cols-3">
-        <MetricCard label="Live tasks" value="0" hint="No active tasks yet" />
-        <MetricCard label="Pending approvals" value="0" hint="Submitted tasks appear here" />
-        <MetricCard label="Open incidents" value="0" hint="Incident workflow next" />
+        <MetricCard label="Live tasks" value="0" hint="Tasks waiting for assignment or follow-up" />
+        <MetricCard label="Pending approvals" value="0" hint="Guard submissions awaiting review" />
+        <MetricCard label="Open incidents" value="0" hint="Reports requiring supervisor action" />
       </div>
-      <EmptyState title="Supervisor flow is ready" description="Task approval, urgent task assignment, and incident follow-up will be built after foundation." />
+      <EmptyState
+        title="Supervisor flow"
+        description="المشرف يرى حالة الدوريات والمهام الحية، يوزع التكليفات، يراجع الأدلة، ويصعد البلاغات للإدارة عند تجاوز الأولوية أو SLA."
+      />
     </Shell>
   );
 }

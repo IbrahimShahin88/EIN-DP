@@ -1,5 +1,7 @@
 import type { RowDataPacket } from "mysql2";
 import { MetricCard } from "@/components/MetricCard";
+import { OperatingDoctrine } from "@/components/OperatingDoctrine";
+import { RoleMatrix } from "@/components/RoleMatrix";
 import { Shell } from "@/components/Shell";
 import { requireRole } from "@/lib/auth";
 import { query } from "@/lib/db";
@@ -64,10 +66,12 @@ export default async function AdminPage() {
   return (
     <Shell
       user={user}
-      title="Admin Console"
-      subtitle="Admin-only control for users, sites, checkpoints, and security operations. الحسابات تنشأ من المدير فقط بدون تسجيل عام."
-      navItems={["Dashboard", "Sites", "Users", "Tasks", "Incidents", "Settings"]}
+      title="Admin Command Center"
+      subtitle="تأسيس المواقع، المستخدمين، نقاط التفتيش، والصلاحيات. لا يوجد تسجيل عام لأن عين نظام أمني مغلق."
+      navItems={["Overview", "Sites", "Users", "Zones", "Checkpoints", "Permissions"]}
     >
+      <OperatingDoctrine />
+      <RoleMatrix />
       <div className="grid gap-4 md:grid-cols-3">
         <MetricCard label="Active sites" value={String(overview.activeSites)} hint="Operational locations" />
         <MetricCard label="Users" value={String(overview.activeUsers)} hint="Created by Admin only" />
