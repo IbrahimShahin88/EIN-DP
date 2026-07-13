@@ -1,34 +1,23 @@
-import { EmptyState } from "@/components/EmptyState";
-import { CoreFunctions } from "@/components/CoreFunctions";
-import { DashboardSummaryPanel } from "@/components/DashboardSummaryPanel";
-import { MetricCard } from "@/components/MetricCard";
-import { RoleMatrix } from "@/components/RoleMatrix";
-import { Shell } from "@/components/Shell";
+import { AppShell } from "@/components/layout/AppShell";
+import { StatCard } from "@/components/ui/StatCard";
 import { requireRole } from "@/lib/auth";
 
 export default async function DashboardPage() {
-  const user = await requireRole(["management"]);
+  const user = await requireRole(["tenant_admin", "security_manager", "viewer"]);
 
   return (
-    <Shell
+    <AppShell
       user={user}
-      title="Management Dashboard"
-      subtitle="لوحة قيادة للإدارة تتابع الأداء، الالتزام بالدوريات، البلاغات المفتوحة، SLA، والتصعيدات عبر المواقع."
-      navItems={["Dashboard", "Sites", "Tasks", "Incidents", "SLA", "Reports"]}
+      title="Welcome to Ein Command Center"
+      subtitle="Tenant command-center placeholder. Operational modules are planned for later sprints and are not implemented yet."
     >
-      <div className="grid gap-4 md:grid-cols-4">
-        <MetricCard label="Tasks today" value="0" hint="Operational workload" />
-        <MetricCard label="Completion" value="0%" hint="Patrol and task compliance" />
-        <MetricCard label="SLA breaches" value="0" hint="Late or escalated work" />
-        <MetricCard label="Open incidents" value="0" hint="Active security reports" />
+      <div className="grid gap-4 md:grid-cols-5">
+        <StatCard label="Security Control Score" value="--" hint="Sprint 4 placeholder" />
+        <StatCard label="Gate Movements" value="--" hint="Sprint 3 placeholder" />
+        <StatCard label="Tasks" value="--" hint="Sprint 5 placeholder" />
+        <StatCard label="Patrol" value="--" hint="Sprint 6 placeholder" />
+        <StatCard label="Incidents" value="--" hint="Sprint 7 placeholder" />
       </div>
-      <DashboardSummaryPanel />
-      <CoreFunctions />
-      <RoleMatrix />
-      <EmptyState
-        title="Management view"
-        description="الإدارة لا تنفذ المهام اليومية، لكنها ترى الحقيقة التشغيلية: من تأخر، أين حدث التصعيد، وما الدليل الذي أغلق المهمة."
-      />
-    </Shell>
+    </AppShell>
   );
 }

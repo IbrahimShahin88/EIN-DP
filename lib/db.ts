@@ -1,26 +1,15 @@
-import mysql from "mysql2/promise";
+import { PrismaClient } from "@prisma/client";
 
-let pool: mysql.Pool | undefined;
+const globalForPrisma = globalThis as typeof globalThis & {
+  prisma?: PrismaClient;
+};
 
-export function isDatabaseConfigured() {
-  return Boolean(process.env.DATABASE_URL);
-}
+export const prisma =
+  globalForPrisma.prisma ??
+  new PrismaClient({
+    log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
+  });
 
-export function getPool() {
-  if (!process.env.DATABASE_URL) {
-    throw new Error("DATABASE_URL is not configured.");
-  }
-
-  pool ??= mysql.createPool(process.env.DATABASE_URL);
-  return pool;
-}
-
-export async function query<T extends mysql.RowDataPacket[] | mysql.ResultSetHeader>(sql: string, params: any[] = []) {
-  const [rows] = await getPool().execute<T>(sql, params);
-  return rows;
-}
-
-export async function pingDatabase() {
-  const rows = await query<mysql.RowDataPacket[]>("SELECT 1 AS ok");
-  return rows[0]?.ok === 1;
+if (process.env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = prisma;
 }

@@ -1,88 +1,49 @@
-import { createHmac, timingSafeEqual } from "crypto";
-import { cookies } from "next/headers";
+import type { Role } from "@prisma/client";
 import { redirect } from "next/navigation";
-import type { SessionUser } from "./types";
+import { prisma } from "./db";
+import { getSessionUserId } from "./session";
 
-export const sessionCookieName = "ayn_session";
+export type CurrentUser = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>;
 
-type TokenPayload = SessionUser & {
-  exp: number;
-};
-
-function getAuthSecret() {
-  const secret = process.env.AUTH_SECRET;
-  if (!secret || secret.length < 32) {
-    throw new Error("AUTH_SECRET must be at least 32 characters.");
-  }
-  return secret;
-}
-
-function base64url(input: string) {
-  return Buffer.from(input).toString("base64url");
-}
-
-function signPayload(encodedPayload: string) {
-  return createHmac("sha256", getAuthSecret()).update(encodedPayload).digest("base64url");
-}
-
-export function createSessionToken(user: SessionUser) {
-  const payload: TokenPayload = {
-    ...user,
-    exp: Math.floor(Date.now() / 1000) + 60 * 60 * 12,
-  };
-  const encodedPayload = base64url(JSON.stringify(payload));
-  const signature = signPayload(encodedPayload);
-
-  return `${encodedPayload}.${signature}`;
-}
-
-export function verifySessionToken(token: string): SessionUser | null {
-  const [encodedPayload, signature] = token.split(".");
-  if (!encodedPayload || !signature) {
+export async function getCurrentUser() {
+  const userId = await getSessionUserId();
+  if (!userId) {
     return null;
   }
 
-  const expected = signPayload(encodedPayload);
-  const expectedBuffer = Buffer.from(expected, "base64url");
-  const signatureBuffer = Buffer.from(signature, "base64url");
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: {
+      tenant: true,
+    },
+  });
 
-  if (expectedBuffer.length !== signatureBuffer.length || !timingSafeEqual(expectedBuffer, signatureBuffer)) {
+  if (!user || user.status !== "active") {
     return null;
   }
 
-  const payload = JSON.parse(Buffer.from(encodedPayload, "base64url").toString("utf8")) as TokenPayload;
-  if (!payload.exp || payload.exp < Math.floor(Date.now() / 1000)) {
+  if (user.tenant && !["active", "trial"].includes(user.tenant.status)) {
     return null;
   }
 
-  return {
-    id: payload.id,
-    fullName: payload.fullName,
-    email: payload.email,
-    role: payload.role,
-    siteId: payload.siteId,
-  };
+  const { passwordHash: _passwordHash, ...safeUser } = user;
+  return safeUser;
 }
 
-export async function getSessionUser() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get(sessionCookieName)?.value;
-
-  return token ? verifySessionToken(token) : null;
-}
-
-export async function requireUser() {
-  const user = await getSessionUser();
+export async function requireAuth() {
+  const user = await getCurrentUser();
   if (!user) {
     redirect("/login");
   }
+
   return user;
 }
 
-export async function requireRole(allowedRoles: SessionUser["role"][]) {
-  const user = await requireUser();
+export async function requireRole(allowedRoles: Role[]) {
+  const user = await requireAuth();
   if (!allowedRoles.includes(user.role)) {
-    redirect("/");
+    redirect("/unauthorized");
   }
+
   return user;
 }

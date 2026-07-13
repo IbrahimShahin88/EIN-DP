@@ -1,5 +1,5 @@
 {
-  "name": "ayn-security-app",
+  "name": "ein-security-operations-platform",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,11 +7,17 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "hash-password": "node scripts/hash-password.mjs",
-    "seed-admin": "node scripts/seed-admin.mjs"
+    "postinstall": "prisma generate",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:seed": "prisma db seed"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
-    "mysql2": "^3.11.5",
+    "@prisma/client": "^6.11.1",
+    "bcryptjs": "^3.0.2",
     "next": "^15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
@@ -24,7 +30,9 @@
     "eslint": "^9.18.0",
     "eslint-config-next": "^15.1.6",
     "postcss": "^8.5.1",
+    "prisma": "^6.11.1",
     "tailwindcss": "^3.4.17",
+    "tsx": "^4.20.3",
     "typescript": "^5.7.3"
   }
 }

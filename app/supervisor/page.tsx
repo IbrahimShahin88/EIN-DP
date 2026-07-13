@@ -1,31 +1,21 @@
-import { EmptyState } from "@/components/EmptyState";
-import { MetricCard } from "@/components/MetricCard";
-import { OperatingDoctrine } from "@/components/OperatingDoctrine";
-import { Shell } from "@/components/Shell";
-import { TaskOperationsPanel } from "@/components/TaskOperationsPanel";
+import { AppShell } from "@/components/layout/AppShell";
+import { StatCard } from "@/components/ui/StatCard";
 import { requireRole } from "@/lib/auth";
 
 export default async function SupervisorPage() {
   const user = await requireRole(["supervisor"]);
 
   return (
-    <Shell
+    <AppShell
       user={user}
-      title="Security Supervisor Workspace"
-      subtitle="توزيع المهام، متابعة الدوريات، مراجعة البلاغات، والتصعيد عند الحاجة قبل أن تتحول المشكلة إلى خطر تشغيلي."
-      navItems={["Live Tasks", "Assign Task", "Patrol Status", "Incidents", "Approvals", "Daily Report"]}
+      title="Supervisor Console"
+      subtitle="Sprint 1 protected placeholder. Live tasks, patrol, and incident workflows arrive in later sprints."
     >
-      <OperatingDoctrine />
-      <TaskOperationsPanel />
       <div className="grid gap-4 md:grid-cols-3">
-        <MetricCard label="Live tasks" value="0" hint="Tasks waiting for assignment or follow-up" />
-        <MetricCard label="Pending approvals" value="0" hint="Guard submissions awaiting review" />
-        <MetricCard label="Open incidents" value="0" hint="Reports requiring supervisor action" />
+        <StatCard label="Live tasks" value="Later" hint="Sprint 5 placeholder" />
+        <StatCard label="Patrol" value="Later" hint="Sprint 6 placeholder" />
+        <StatCard label="Incidents" value="Later" hint="Sprint 7 placeholder" />
       </div>
-      <EmptyState
-        title="Supervisor flow"
-        description="المشرف يرى حالة الدوريات والمهام الحية، يوزع التكليفات، يراجع الأدلة، ويصعد البلاغات للإدارة عند تجاوز الأولوية أو SLA."
-      />
-    </Shell>
+    </AppShell>
   );
 }

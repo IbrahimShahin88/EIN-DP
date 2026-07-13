@@ -1,210 +1,147 @@
-# AYN Security Tasks
+# Ein Security Operations Platform
 
-AYN Security is a Web/PWA-ready security operations platform for malls, factories, compounds, ports, and logistics sites.
+Arabic name: عين
 
-The product vision is simple:
+Tagline: **See. Control. Prove.**
 
-> العين ترى، تسجل، تصعّد، وتغلق المهمة بالدليل.
+Ein is a commercial multi-tenant SaaS platform for audit-ready security operations. This repository currently implements only:
 
-AYN turns verbal and paper-based security follow-up into a live operational system where every task, QR checkpoint, incident, escalation, and closure has an accountable evidence trail.
+- Sprint 0: Project Foundation
+- Sprint 1: Authentication & Multi-Tenant
 
-## Operating Roles
+Future operational modules are intentionally not implemented yet.
 
-| Role | Function |
-| --- | --- |
-| Admin | Create sites, users, checkpoints, and permissions. |
-| Security Supervisor | Assign tasks, monitor patrols, review incidents, and escalate when needed. |
-| Security Guard | Execute tasks, scan QR checkpoints, upload images, and record notes. |
-| Management | View dashboards, KPIs, reports, SLA status, and escalations. |
+## Tech Stack
 
-Public registration is intentionally disabled. Users are created by Admin only because AYN is a closed security system, not an open public app.
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- Prisma ORM
+- TiDB Cloud / MySQL-compatible database
+- Secure HTTP-only cookie authentication
+- bcrypt password hashing via `bcryptjs`
+- Role-based access control
+- Multi-tenant data model
+- Vercel-ready deployment
 
-## Core Functions
+## Environment Variables
 
-### Security Site Structure
-
-AYN models every secured location as:
-
-```text
-Client -> Site -> Zone -> Checkpoint
-```
-
-Example:
-
-```text
-Company / Mall
--> 20 West Mall
--> Parking Zone
--> Gate 01 / Fire Exit / CCTV Room / Roof Access
-```
-
-Every checkpoint has its own QR code for patrol proof.
-
-### Security Tasks
-
-Task types in V1:
-
-| Type | Example |
-| --- | --- |
-| Patrol Task | Visit selected checkpoints every hour. |
-| Fixed Post Task | Confirm presence at a gate or entrance. |
-| Incident Task | Fight, theft, unauthorized access. |
-| Checklist Task | Fire extinguishers, emergency doors, exits. |
-| Escort Task | Escort visitor or contractor. |
-| Urgent Task | Immediate supervisor intervention. |
-
-Task status flow:
-
-```text
-Pending -> In Progress -> Submitted -> Approved / Rejected / Escalated
-```
-
-### QR Patrol
-
-When a guard scans a checkpoint QR code, AYN records:
-
-- Guard name
-- Checkpoint
-- Time
-- GPS when available
-- Optional image
-- Note
-- Late/on-time flag
-
-### Incidents
-
-Incident reports include:
-
-- Incident type
-- Severity: `Low`, `Medium`, `High`, `Critical`
-- Location
-- Description
-- Images
-- Action taken
-- Escalation
-- Closure status
-
-### Dashboard
-
-Management dashboard tracks:
-
-- Tasks today
-- Completion rate
-- Late tasks
-- Open incidents
-- Guard performance
-- Most problematic checkpoints
-- Incidents by severity
-- Patrol compliance %
-
-## MVP V1 Scope
-
-The first production version stays simple and strong:
-
-- Login
-- Users & roles
-- Sites / zones / checkpoints
-- Create task
-- Guard task list
-- QR check-in
-- Incident report
-- Supervisor approval
-- Basic dashboard
-
-V2 candidates include AI, Walkie Talkie, Face Recognition, Maps, and native mobile apps.
-
-Sprint 1 delivers:
-
-- Next.js App Router + TypeScript + Tailwind CSS
-- Secure login API with signed HTTP-only cookies
-- Role-based redirects for `admin`, `supervisor`, `guard`, and `management`
-- Admin-only user creation after the first bootstrap account
-- Basic responsive dashboards for each role
-- TiDB/MySQL connection layer using `mysql2`
-- SQL schema for the core MVP tables
-
-## Setup
-
-1. Install dependencies:
+Create `.env.local` from `.env.example`:
 
 ```bash
-npm install
-```
-
-2. Create `.env.local` from `.env.example`:
-
-```bash
-DATABASE_URL="mysql://USER:PASSWORD@HOST:4000/DATABASE?ssl={\"rejectUnauthorized\":true}"
+DATABASE_URL="mysql://USER:PASSWORD@HOST:4000/DATABASE?sslaccept=strict"
 AUTH_SECRET="replace-with-a-long-random-secret-at-least-32-characters"
+NEXT_PUBLIC_APP_NAME="Ein"
+NEXT_PUBLIC_APP_AR_NAME="عين"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+UPLOAD_PROVIDER="placeholder"
 COOKIE_SECURE="false"
 ```
 
-Use `COOKIE_SECURE=false` for local development over `http://localhost:3000`. Use `true` on Vercel.
+Use `COOKIE_SECURE=false` locally over HTTP. Use secure cookies in production.
 
-3. Create the database tables in TiDB Cloud by running `db/schema.sql`.
-
-4. Generate a password hash for your first Admin user:
+## Local Setup
 
 ```bash
-npm run hash-password -- "StrongPasswordHere"
-```
-
-5. Insert the first Admin user manually in TiDB:
-
-```sql
-INSERT INTO users (full_name, email, password_hash, role, status)
-VALUES ('AYN Admin', 'admin@example.com', 'PASTE_HASH_HERE', 'admin', 'active');
-```
-
-Or seed/update a bootstrap admin through the app script when `DATABASE_URL` is available:
-
-```bash
-npm run seed-admin -- "admin" "123"
-```
-
-Use `123` only as a temporary bootstrap password, then replace it with a stronger password.
-
-After that first bootstrap account, create all additional users from `/admin`. Public registration is intentionally not available.
-
-6. Start the app:
-
-```bash
+npm install
+npx prisma generate
+npx prisma migrate dev
+npx prisma db seed
 npm run dev
 ```
 
-Open `http://localhost:3000/login`.
+Open `http://localhost:3000`.
 
-## Role Redirects
+## Build
 
-- `admin` -> `/admin`
-- `supervisor` -> `/supervisor`
-- `guard` -> `/guard`
-- `management` -> `/dashboard`
+```bash
+npm run build
+```
+
+## Prisma
+
+Schema: `prisma/schema.prisma`
+
+Implemented models:
+
+- `Tenant`
+- `User`
+- `AuditLog`
+
+Tenant data is scoped by `tenantId`. Super admins may access global admin views; tenant users are bound to their tenant.
+
+## Demo Seed Users
+
+All seeded users use the development/demo password:
+
+```text
+Ein@123456
+```
+
+Change this before production use.
+
+| Email | Role | Redirect |
+| --- | --- | --- |
+| `superadmin@ein.app` | `super_admin` | `/admin` |
+| `tenantadmin@demo.ein.app` | `tenant_admin` | `/dashboard` |
+| `manager@demo.ein.app` | `security_manager` | `/dashboard` |
+| `supervisor@demo.ein.app` | `supervisor` | `/supervisor` |
+| `gate@demo.ein.app` | `gate_officer` | `/gate` |
+| `guard@demo.ein.app` | `guard` | `/guard` |
+| `viewer@demo.ein.app` | `viewer` | `/dashboard` |
 
 ## API Routes
 
 - `POST /api/auth/login`
 - `POST /api/auth/logout`
 - `GET /api/me`
-- `GET /api/health/db`
-- `GET /api/dashboard/summary`
-- `GET/POST /api/users` (admin only)
-- `GET/POST /api/clients`
-- `GET/POST /api/sites`
-- `GET/POST /api/zones`
-- `GET/POST /api/tasks`
-- `POST /api/tasks/:id/approval`
-- `GET/POST /api/incidents`
-- `GET/POST /api/checkpoints`
-- `POST /api/qr-checkins`
+- `GET /api/admin/tenants`
+- `POST /api/admin/tenants`
+- `GET /api/admin/users`
+- `POST /api/admin/users`
 
-## Vercel
+## Pages
 
-1. Push this repository to GitHub.
-2. Import the repository in Vercel.
-3. Add `DATABASE_URL`, `AUTH_SECRET`, and `COOKIE_SECURE=true` to Vercel Environment Variables.
-4. Deploy. Vercel will build the Next.js app automatically.
+- `/` public placeholder home
+- `/login`
+- `/admin` super admin only
+- `/dashboard` tenant admin, security manager, viewer
+- `/supervisor` supervisor only
+- `/gate` gate officer only
+- `/guard` guard only
+- `/unauthorized`
 
-## TiDB Cloud
+## Not Implemented Yet
 
-Create a TiDB Cloud cluster, copy the MySQL-compatible connection string, and use it as `DATABASE_URL`. Keep secrets in `.env.local` locally and Vercel Environment Variables in production.
+The following roadmap items are intentionally placeholders only:
+
+- Gate operations
+- Patrol
+- Tasks
+- Incidents
+- Reports
+- Evidence archive
+- Subscription management
+- Landing page / commercial demo request
+- Payment
+- File upload
+- AI
+- WhatsApp
+- Hardware integrations
+
+## Vercel Notes
+
+Add these environment variables in Vercel:
+
+- `DATABASE_URL`
+- `AUTH_SECRET`
+- `NEXT_PUBLIC_APP_NAME`
+- `NEXT_PUBLIC_APP_AR_NAME`
+- `NEXT_PUBLIC_APP_URL`
+- `UPLOAD_PROVIDER`
+
+Run Prisma migrations against your TiDB/MySQL database before production use.
+
+## TiDB Notes
+
+Use the TiDB Cloud MySQL-compatible connection string as `DATABASE_URL`. Keep secrets in local `.env.local` and Vercel Environment Variables.
